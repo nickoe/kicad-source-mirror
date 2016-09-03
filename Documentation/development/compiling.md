@@ -160,6 +160,17 @@ The KICAD_SPICE option is used to control if the Spice simulator interface for e
 the options is enabled, it requires [ngspice][] to be available as a shared library.  This option is
 disabled by default.
 
+## New schmatic file format ## {#sch_io_mgr_opt}
+
+The KICAD_USE_SCH_IO_MANAGER option is used to control if the new Eeschema I/O manager for handling
+schematic and symbol library I/O is enabled. This option is disabled by default.
+
+## STEP/IGES support for the 3D viewer ## {#oce_opt}
+
+The KICAD_USE_OCE is used for the 3D viewer plugin to support STEP and IGES 3D models. Build tools
+and plugins related to OpenCascade Community Edition (OCE) are enabled with this option. When
+enabled it requires [OCE][] to be available. This option is disabled by default.
+
 # Getting the KiCad Source Code ## {#getting_src}
 
 There are several ways to get the KiCad source.  If you want to build the stable version you
