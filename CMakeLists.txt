@@ -644,7 +644,9 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         # Check to see if the correct version of wxPython is installed based on the version of
         # wxWidgets found.  At least the major an minor version should match.
         set( _wxpy_version "${wxWidgets_VERSION_MAJOR}.${wxWidgets_VERSION_MINOR}" )
-        set( _py_cmd "import wxversion;print wxversion.checkInstalled('${_wxpy_version}')" )
+        set( _wxpy_version "4.0" )
+        #set( _py_cmd "import wxversion;print wxversion.checkInstalled('${_wxpy_version}')" )
+        set( _py_cmd "import wx; import re; print(re.search('wxWidgets 3.0', wx.wxWidgets_version) != None)")
 
         # Add user specified Python site package path.
         if( PYTHON_SITE_PACKAGE_PATH )
@@ -658,8 +660,10 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
             OUTPUT_STRIP_TRAILING_WHITESPACE
             )
 
-        # message( STATUS "WXPYTHON_VERSION_FOUND: ${WXPYTHON_VERSION_FOUND}" )
-        # message( STATUS "WXPYTHON_VERSION_RESULT: ${WXPYTHON_VERSION_RESULT}" )
+        message( STATUS "${PYTHON_EXECUTABLE} -c ${_py_cmd} ${RESULT_VARIABLE} ${WXPYTHON_VERSION_RESULT} ${OUTPUT_VARIABLE} ${WXPYTHON_VERSION_FOUND}")
+          
+        message( STATUS "WXPYTHON_VERSION_FOUND: ${WXPYTHON_VERSION_FOUND}" )
+        message( STATUS "WXPYTHON_VERSION_RESULT: ${WXPYTHON_VERSION_RESULT}" )
 
         # Check to see if any version of wxPython is installed on the system.
         if( WXPYTHON_VERSION_RESULT GREATER 0 )

@@ -36,7 +36,9 @@
 #include <Python.h>
 #ifndef NO_WXPYTHON_EXTENSION_HEADERS
 #ifdef KICAD_SCRIPTING_WXPYTHON
-    #include <wx/wxPython/wxPython.h>
+//    #include <wx/wxPython/wxPython.h>
+#include <wxpy_api.h>
+#include <wx/window.h>
 #endif
 #endif
 

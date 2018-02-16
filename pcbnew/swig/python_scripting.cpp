@@ -154,7 +154,8 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     // Make sure that that the correct version of wxPython is loaded. In systems where there
     // are different versions of wxPython installed this can lead to select wrong wxPython
     // version being selected.
-    snprintf( cmd, sizeof(cmd), "import wxversion;  wxversion.select('%s')", WXPYTHON_VERSION );
+    //snprintf( cmd, sizeof(cmd), "import wxversion;  wxversion.select('%s')", WXPYTHON_VERSION );
+    snprintf( cmd, sizeof(cmd), "import wx");
 
     int retv = PyRun_SimpleString( cmd );
 
@@ -167,9 +168,13 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     }
 #endif      // ifndef __WINDOWS__
 
+
+    // turning off this stuff in phoenix. hopefully, it doesn't break stuff.
+
     // Load the wxPython core API.  Imports the wx._core_ module and sets a
     // local pointer to a function table located there.  The pointer is used
     // internally by the rest of the API functions.
+#if 0
     if( !wxPyCoreAPI_IMPORT() )
     {
         wxLogError( wxT( "***** Error importing the wxPython API! *****" ) );
@@ -177,13 +182,14 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
         Py_Finalize();
         return false;
     }
-
+#endif
     wxPythonLoaded = true;
 
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
 
     g_PythonMainTState = wxPyBeginAllowThreads();
+    
 #endif  // ifdef KICAD_SCRIPTING_WXPYTHON
 
     // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
@@ -267,7 +273,7 @@ void pcbnewGetWizardsBackTrace( wxString& aNames )
 void pcbnewFinishPythonScripting()
 {
 #ifdef KICAD_SCRIPTING_WXPYTHON
-    wxPyEndAllowThreads( g_PythonMainTState );
+  //wxPyEndAllowThreads( g_PythonMainTState );
 #endif
     Py_Finalize();
 }
@@ -337,7 +343,8 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
     // use of another wxPython API to take a wxWindows object and build a
     // wxPython object that wraps it.
 
-    PyObject*   arg = wxPyMake_wxObject( parent, false );
+    //PyObject*   arg = wxPyMake_wxObject( parent, false );
+    PyObject* arg =     wxPyConstructObject(parent, "wxWindow", false);
     wxASSERT( arg != NULL );
 
     PyObject*   tuple = PyTuple_New( 1 );
@@ -352,7 +359,8 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
     {
         // Otherwise, get the returned window out of Python-land and
         // into C++-ville...
-        bool success = wxPyConvertSwigPtr( result, (void**) &window, "wxWindow" );
+        //bool success = wxPyConvertSwigPtr( result, (void**) &window, "wxWindow" );
+        bool success = wxPyConvertWrappedPtr(result, (void**) &window, "wxWindow");
         (void) success;
 
         wxASSERT_MSG( success, "Returned object was not a wxWindow!" );

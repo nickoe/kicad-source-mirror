@@ -17,6 +17,7 @@ the first shell if they require.
 import wx
 import sys
 import os
+import pdb
 
 from wx.py import crust, editor, version, dispatcher
 from wx.py.editor import EditorNotebook
@@ -82,6 +83,12 @@ class PcbnewPyShell(editor.EditorNotebookFrame):
         self.autoSaveHistory = False
         self.LoadSettings()
 
+        # there's surely a better way to do this. I have to create
+        # and keep a pointer to the app object. If I don't store this
+        # (otherwise unused) object, the garbage collector will delete
+        # it and other wx stuff will fail.
+        self.theApp = wx.App();
+        
         self.crust = crust.Crust(parent=self.notebook,
                                  intro=intro, locals=namespace,
                                  rootLabel="locals()",
