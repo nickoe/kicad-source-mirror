@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    node {
+      label 'master'
+    }
+
+  }
   stages {
     stage('Fetch and check tags') {
       steps {
@@ -15,7 +20,7 @@ pipeline {
             build 'osx-kicad-adam-head'
           }
         }
-        stage('') {
+        stage('error') {
           steps {
             build 'linux-kicad-full-gcc-head'
             build 'linux-kicad-full-clang-head'
@@ -23,7 +28,7 @@ pipeline {
         }
       }
     }
-    stage('') {
+    stage('error') {
       steps {
         warnings(canComputeNew: true, includePattern: 'warning:')
       }
