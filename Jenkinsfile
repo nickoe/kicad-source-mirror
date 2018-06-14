@@ -8,8 +8,8 @@ pipeline {
   stages {
     stage('Fetch and check tags') {
       steps {
-        git(url: 'git@github.com:nickoe/kicad-source-mirror.git', branch: 'master')
-        git(url: 'git@github.com:nickoe/kicad-doc.git', branch: 'master')
+        git(url: 'https://github.com/nickoe/kicad-source-mirror.git', branch: 'master')
+        git(url: 'https://github.com/nickoe/kicad-doc.git', branch: 'master')
       }
     }
     stage('Build') {
