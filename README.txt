@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fnickoe%2Fkicad-source-mirror.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fnickoe%2Fkicad-source-mirror?ref=badge_shield)
+
 KiCad README
 ============
 For specific documentation like Compiling, GUI translation, old
@@ -46,3 +48,7 @@ template          - Project and pagelayout templates
 tools             - Other miscellaneous helpers for testing
 utils             - Small utils for kicad, e.g. IDF tools
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fnickoe%2Fkicad-source-mirror.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fnickoe%2Fkicad-source-mirror?ref=badge_large)
