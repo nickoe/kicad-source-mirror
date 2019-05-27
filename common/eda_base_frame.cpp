@@ -29,6 +29,7 @@
 #include <dialog_shim.h>
 #include <eda_doc.h>
 #include <id.h>
+#include <confirm.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <trace_helpers.h>
@@ -70,11 +71,12 @@ static const wxString entryMaximized = "Maximized";  ///< Nonzero iff frame is m
 BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::OnKicadAbout )
     EVT_MENU( wxID_PREFERENCES, EDA_BASE_FRAME::OnPreferences )
-    
+
     EVT_CHAR_HOOK( EDA_BASE_FRAME::OnCharHook )
     EVT_MENU_OPEN( EDA_BASE_FRAME::OnMenuOpen )
     EVT_MENU_CLOSE( EDA_BASE_FRAME::OnMenuOpen )
     EVT_MENU_HIGHLIGHT_ALL( EDA_BASE_FRAME::OnMenuOpen )
+    EVT_MENU( ID_SIMULATE_CRASH, EDA_BASE_FRAME::OnSimulateCrash )
 END_EVENT_TABLE()
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
@@ -371,8 +373,17 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
     helpMenu->Add( ACTIONS::help );
     helpMenu->Add( ACTIONS::gettingStarted );
     helpMenu->Add( ACTIONS::listHotKeys );
+    #ifdef KICAD_CRASH_REPORTER
+        helpMenu->AppendSeparator();
+
+        AddMenuItem( helpMenu, ID_SIMULATE_CRASH,
+                    _( "Force KiCad crash" ),
+                    _( "Will crash KiCad. For testing of the Debug Report feature." ),
+                    KiBitmap( help_xpm ) );
+    #endif
+    helpMenu->AppendSeparator();
     helpMenu->Add( ACTIONS::getInvolved );
-    
+
     helpMenu->AppendSeparator();
     helpMenu->Add( _( "&About KiCad" ), "", wxID_ABOUT, about_xpm );
 
@@ -608,7 +619,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     wxTreebook* book = dlg.GetTreebook();
 
     book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
-    
+
     PANEL_HOTKEYS_EDITOR* hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
     book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
 
@@ -738,3 +749,16 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
 }
 
 
+#ifdef KICAD_CRASH_REPORTER
+
+void EDA_BASE_FRAME::OnSimulateCrash( wxCommandEvent& event )
+{
+    bool crash = IsOK( this, _("Clicking on OK will crash KiCad. Did you save?" ) );
+
+    if(!crash)
+        return;
+
+    * (volatile int *) 0xdeafbeef = 0xcafebabe;
+}
+
+#endif
